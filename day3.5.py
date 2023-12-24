@@ -19,9 +19,7 @@ numbers = "0123456789"
 visited = set()
 
 def get_number(i, j):
-    if (i, j) in visited:
-        return 0
-    if i >= rows or j >= columns or i < 0 or j < 0:
+    if i >= rows or j >= columns or i < 0 or j < 0 or (i, j) in visited:
         return 0
     if matrix[i][j] not in numbers:
         return 0
@@ -45,12 +43,17 @@ def get_number(i, j):
     
     return int(digit) 
 
+
 total = 0
 for i in range(rows):
     for j in range(columns):
-        for direction in directions:
-            dx, dy = direction
-            if matrix[i][j] not in numbers and matrix[i][j] != ".":
-                total += get_number(i+dx, j+dy)
+        if matrix[i][j] == '*':
+            all_values = [get_number(i + dx, j + dy) for dx, dy in directions]
+            all_values = [value for value in all_values if value > 0]
+            if len(all_values) == 2:
+                total += all_values[0]*all_values[1]
+            # print(all_values)
+        #print(i, j)
+        #print(adjacent_values)
 
 print(total)
